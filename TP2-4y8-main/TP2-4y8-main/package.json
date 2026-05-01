@@ -1,0 +1,20 @@
+{
+  "name": "tp1-typescript",
+  "version": "1.0.0",
+  "description": "Mini tienda de juegos",
+  "main": "src/main.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node src/main.js",
+    "test": "vitest run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@vitest/coverage-v8": "^4.1.2",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.2"
+  }
+}
