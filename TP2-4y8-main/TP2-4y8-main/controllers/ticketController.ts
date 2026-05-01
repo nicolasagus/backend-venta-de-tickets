@@ -1,42 +1,47 @@
-// En src/main/controllers/ticketController.ts
 import { Request, Response } from 'express';
-import { TicketBuilder } from '../models/TicketBuilder.js';
+import { CompraBuilder } from '../models/CompraBuilder.js';
 import { ProcesadorDePagos } from '../services/pagos/ProcesadorDePagos.js';
 import { MercadoPagoAdapter } from '../services/pagos/MercadoPagoAdapter.js';
 import { ProcesarCompraCommand } from '../services/commands/ProcesarCompraCommand.js';
 import { GestorDeTransacciones } from '../services/commands/GestorDeTransacciones.js';
 
-// Instanciamos el gerente que manejará la cola de transacciones (podría ser Singleton también)
+// Instanciamos el gerente que manejará los comandos
 const gestor = new GestorDeTransacciones();
 
-export const savePurchase = async (req: Request, res: Response): Promise<void> => {
+export const realizarCompra = async (req: Request, res: Response): Promise<void> => {
     try {
-        const datos = req.body; // { juego: "Elden Ring", comprador: "laena", precio: 60000 }
+        // 1. Recibimos los datos que manda el usuario desde el Frontend (o Postman)
+        const { nombreApellido, email, idJuego, precioFinal } = req.body;
 
-        // PATRÓN 1: BUILDER (Armamos el ticket)
-        const ticket = new TicketBuilder()
-            .conTransaccion("TX-" + Date.now())
-            .paraElJuego(datos.juego)
-            .compradoPor(datos.comprador)
-            .porUnMontoDe(datos.precio)
+        // 2. PATRÓN BUILDER: Armamos el objeto Compra paso a paso
+        const nuevaCompra = new CompraBuilder()
+            .conNombreYApellido(nombreApellido)
+            .conEmail(email)
+            .paraElJuego(idJuego)
+            .porUnPrecioDe(precioFinal)
             .build();
 
-        // PATRÓN 2 y 3: STRATEGY + ADAPTER (Preparamos el cobro)
-        const procesador = new ProcesadorDePagos(new MercadoPagoAdapter());
+        // 3. PATRÓN STRATEGY + ADAPTER: Preparamos a Mercado Pago
+        const procesadorPagos = new ProcesadorDePagos(new MercadoPagoAdapter());
 
-        // PATRÓN 4: COMMAND (Encapsulamos la orden)
-        const comandoCompra = new ProcesarCompraCommand(ticket, procesador);
+        // 4. PATRÓN COMMAND: Encapsulamos toda la orden
+        const comandoCompra = new ProcesarCompraCommand(nuevaCompra, procesadorPagos);
 
-        // ¡Ejecutamos mediante el Gestor!
+        // 5. ¡Ejecutamos!
         const exito = await gestor.ejecutarOperacion(comandoCompra);
 
         if (exito) {
-            res.status(201).json({ message: "Compra exitosa", ticket });
+            // Respondemos al frontend que todo salió bien
+            res.status(201).json({ 
+                mensaje: "¡Compra exitosa!", 
+                compra: nuevaCompra 
+            });
         } else {
-            res.status(400).json({ error: "Pago rechazado" });
+            res.status(400).json({ error: "El pago fue rechazado." });
         }
 
     } catch (error) {
-        res.status(500).json({ error: "Error interno del servidor" });
+        console.error("Error en el controlador:", error);
+        res.status(500).json({ error: "Faltan datos obligatorios o hubo un error en el servidor." });
     }
 };

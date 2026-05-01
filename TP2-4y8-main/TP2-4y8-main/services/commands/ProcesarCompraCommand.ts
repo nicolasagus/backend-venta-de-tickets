@@ -1,4 +1,5 @@
 // src/main/services/commands/ProcesarCompraCommand.ts
+import CompraRepository from '../../repositories/compraRepository.js';
 import { ICommand } from './ICommand.js';
 import { Ticket } from '../../models/Ticket.js';
 import { ProcesadorDePagos } from '../pagos/ProcesadorDePagos.js';

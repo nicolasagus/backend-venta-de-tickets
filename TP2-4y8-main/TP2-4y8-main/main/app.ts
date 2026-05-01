@@ -1,19 +1,21 @@
 import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-// Ruta corregida:
-import { getTickets, savePurchase } from '../controllers/ticketController.js';
-dotenv.config();
+// Ajustá la ruta del import si tu controlador se llama distinto o está en otra carpeta
+import { realizarCompra } from '../controllers/ticketController.js'; 
 
 const app = express();
-app.use(cors());
+
+// Middleware fundamental para que Express entienda los datos en formato JSON que le mandamos
 app.use(express.json());
 
-// --- RUTAS DE LA API ---
-app.get('/api/tickets', getTickets);      // Para el Paso 1
-app.post('/api/purchase', savePurchase);  // Para el Paso 2
+// --- RUTAS DE NUESTRA API ---
+// Cuando alguien haga un POST a "http://localhost:3000/api/comprar", se ejecuta tu Controlador
+app.post('/api/comprar', realizarCompra);
 
+// --- ARRANQUE DEL SERVIDOR ---
+// Leemos el puerto desde tu archivo .env, o usamos el 3000 por defecto
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
-    console.log(`✅ Servidor escuchando en http://localhost:${PORT}`);
+    console.log(`🚀 Servidor backend corriendo a toda velocidad en http://localhost:${PORT}`);
+    console.log(`🛒 Listo para recibir compras en la ruta POST: /api/comprar`);
 });

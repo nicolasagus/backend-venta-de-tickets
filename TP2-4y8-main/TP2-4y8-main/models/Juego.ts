@@ -1,22 +1,32 @@
 import { Producto } from "./Producto";
 import { IComprar } from "./IComprar";
 
-// juego hereda de producto e implementa comprar
+// Juego hereda de producto e implementa comprar
 export class Juego extends Producto implements IComprar {
 
-    // atributo propio de juego
+    // atributo propio de juego original
     private genero: string;
+    
+    // NUEVOS atributos pedidos por tu grupo para la Base de Datos
+    public id?: string;
+    public descripcion: string;
+    public imagen: string;
+    public habilitado: boolean;
 
-    constructor(titulo: string, genero: string, precio: number){
-        super(titulo, precio); //llama al constructor de Producto
+    // Actualizamos el constructor para recibir los datos nuevos
+    constructor(titulo: string, genero: string, precio: number, descripcion: string = "", imagen: string = "") {
+        super(titulo, precio); // llama al constructor de Producto
         this.genero = genero;
+        this.descripcion = descripcion;
+        this.imagen = imagen;
+        this.habilitado = true; // Por defecto lo dejamos habilitado al crearlo
     }
 
     public getGenero(): string {
         return this.genero;
     }
 
-    public comprar(): string{
+    public comprar(): string {
         return "Juego Comprado";
     }
 
