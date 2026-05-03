@@ -34,26 +34,43 @@ class TicketRepository {
             throw new Error("Supabase no está configurado. Revisa SUPABASE_URL y SUPABASE_KEY en el .env.");
         }
 
-        // Ajustado para coincidir con las columnas de la tabla 'compras' en SQL
-        const { data, error } = await supabase
-            .from('compras')
-            .insert([{
+        // 1. Guardar o actualizar al comprador (Upsert basado en email)
+        const { data: compradorData, error: compradorError } = await supabase
+            .from('compradores')
+            .upsert([{
                 nombre_apellido: purchaseData.nombre + ' ' + purchaseData.apellido,
                 documento: purchaseData.documento,
                 email: purchaseData.email,
                 telefono: purchaseData.telefono,
                 provincia: purchaseData.provincia,
                 localidad: purchaseData.localidad,
+            }], { onConflict: 'email' })
+            .select()
+            .single();
+
+        if (compradorError) {
+            throw new Error("Error guardando el comprador: " + compradorError.message);
+        }
+
+        // 2. Crear el registro de la compra
+        const { data: compraData, error: compraError } = await supabase
+            .from('compras')
+            .insert([{
+                id_comprador: compradorData.id,
                 id_producto: purchaseData.idJuego,
                 cantidad: purchaseData.cantidad,
                 precio_final: purchaseData.precioFinal,
                 estado: purchaseData.estado || 'pendiente',
                 referencia_pago: purchaseData.referenciaPago,
+                payment_url: purchaseData.paymentUrl,
                 fecha_compra: purchaseData.fechaCompra || new Date().toISOString()
             }]);
 
-        if (error) throw new Error(error.message);
-        return data;
+        if (compraError) {
+            throw new Error("Error creando la compra: " + compraError.message);
+        }
+
+        return compraData;
     }
 }
 
