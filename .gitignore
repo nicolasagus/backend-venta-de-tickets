@@ -1,0 +1,9 @@
+node_modules/
+*.js
+*.js.map
+*.d.ts
+*.d.ts.map
+dist/
+*.js
+!jest.config.js
+!vitest.config.js
