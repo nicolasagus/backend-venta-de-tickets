@@ -50,7 +50,7 @@ El servidor backend está corriendo en: `http://localhost:3000`
   "localidad": "Madrid",
   "cantidad": 2,
   "email": "juan@example.com",
-  "idJuego": 1,
+  "idJuego": "6a3d0825-0284-419b-831d-eba51bddd7ce",
   "nombreJuego": "Elden Ring",
   "precioUnitario": 3999
 }
@@ -67,7 +67,7 @@ El servidor backend está corriendo en: `http://localhost:3000`
 | localidad | string | Localidad/Ciudad |
 | cantidad | number | Cantidad de entradas (1-6) |
 | email | string | Email del comprador |
-| idJuego | number | ID del juego |
+| idJuego | string | ID del juego (UUID) |
 | nombreJuego | string | Nombre del juego |
 | precioUnitario | number | Precio por unidad |
 

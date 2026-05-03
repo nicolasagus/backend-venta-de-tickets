@@ -8,9 +8,9 @@ class TicketRepository {
             throw new Error("Supabase no está configurado. Revisa SUPABASE_URL y SUPABASE_KEY en el .env.");
         }
 
-        // Obtener juegos de la tabla 'juegos'
+        // Obtener juegos de la tabla 'productos'
         const { data, error } = await supabase
-            .from('juegos')
+            .from('productos')
             .select('*')
             .eq('habilitado', true);
 
@@ -38,22 +38,17 @@ class TicketRepository {
         const { data, error } = await supabase
             .from('compras')
             .insert([{
-                nombre: purchaseData.nombre,
-                apellido: purchaseData.apellido,
-                nombre_apellido: purchaseData.nombreApellido,
+                nombre_apellido: purchaseData.nombre + ' ' + purchaseData.apellido,
                 documento: purchaseData.documento,
                 email: purchaseData.email,
                 telefono: purchaseData.telefono,
                 provincia: purchaseData.provincia,
                 localidad: purchaseData.localidad,
-                id_juego: purchaseData.idJuego,
-                nombre_juego: purchaseData.nombreJuego,
+                id_producto: purchaseData.idJuego,
                 cantidad: purchaseData.cantidad,
-                precio_unitario: purchaseData.precioUnitario,
                 precio_final: purchaseData.precioFinal,
                 estado: purchaseData.estado || 'pendiente',
                 referencia_pago: purchaseData.referenciaPago,
-                payment_url: purchaseData.paymentUrl,
                 fecha_compra: purchaseData.fechaCompra || new Date().toISOString()
             }]);
 
