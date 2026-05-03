@@ -8,7 +8,7 @@ describe('Estrategias de Pago', () => {
         it('should process payment successfully', async () => {
             const strategy = new MockPagoStrategy();
             const result = await strategy.procesarPago(100, 'TX-123');
-            expect(result).toBe(true);
+            expect(result.success).toBe(true);
         });
 
         it('should process payment for any amount', async () => {
@@ -17,8 +17,8 @@ describe('Estrategias de Pago', () => {
             const result1 = await strategy.procesarPago(50, 'TX-1');
             const result2 = await strategy.procesarPago(1000, 'TX-2');
             
-            expect(result1).toBe(true);
-            expect(result2).toBe(true);
+            expect(result1.success).toBe(true);
+            expect(result2.success).toBe(true);
         });
     });
 
@@ -26,7 +26,7 @@ describe('Estrategias de Pago', () => {
         it('should process payment through SDK', async () => {
             const strategy = new MercadoPagoStrategy();
             const result = await strategy.procesarPago(100, 'TX-123');
-            expect(result).toBe(true);
+            expect(result.success).toBe(true);
         });
     });
 
@@ -42,8 +42,8 @@ describe('Estrategias de Pago', () => {
             const result = await procesador.ejecutarCobro(100, 'TX-123');
             
             expect(result.success).toBe(true);
-            expect(result.paymentId).toContain('MP-');
-            expect(result.redirectUrl).toContain('sandbox.mercadopago.com');
+            expect(result.paymentId).toContain('MOCK-');
+            expect(result.redirectUrl).toContain('sandbox.mercadopago.com/checkout/mock');
         });
 
         it('should switch strategies', async () => {
@@ -57,7 +57,7 @@ describe('Estrategias de Pago', () => {
         it('should handle payment failures', async () => {
             // Crear una estrategia que siempre falla
             const failingStrategy = {
-                procesarPago: async () => false
+                procesarPago: async () => ({ success: false })
             };
             
             procesador.setStrategy(failingStrategy as any);

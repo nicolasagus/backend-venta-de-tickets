@@ -1,5 +1,4 @@
-// src/main/services/pagos/MercadoPagoAdapter.ts
-import { IPagoStrategy } from './IpagoStrategy.js';
+import { IPagoStrategy, PagoResultData } from './IpagoStrategy.js';
 import { MercadoPagoSDK } from './MercadoPagoSDK.js';
 
 export class MercadoPagoAdapter implements IPagoStrategy {
@@ -9,28 +8,31 @@ export class MercadoPagoAdapter implements IPagoStrategy {
         this.sdkExterno = new MercadoPagoSDK();
     }
 
-    // Cumplimos con la regla de tu sistema
-    async procesarPago(monto: number, idTransaccion: string): Promise<boolean> {
+    async procesarPago(monto: number, idTransaccion: string): Promise<PagoResultData> {
         console.log("[Adapter] Adaptando los datos de tu compra al formato de Mercado Pago...");
         
         try {
-            // Traducimos los datos para que el SDK externo los acepte
             const respuestaExterna = await this.sdkExterno.crearPreferencia({
                 total: monto,
-                currency: "ARS", // Dato duro que exige MP
-                reference: idTransaccion
+                currency: "ARS",
+                reference: idTransaccion,
+                itemTitle: "Compra de Tickets"
             });
 
-            // Traducimos la respuesta de MP a un simple true/false para tu sistema
-            if (respuestaExterna.status === "approved") {
-                console.log(`[Adapter] Pago aprobado con éxito. ID: ${respuestaExterna.id}`);
-                return true;
+            if (respuestaExterna.status === "approved" || respuestaExterna.init_point) {
+                console.log(`[Adapter] Preferencia creada con éxito. ID: ${respuestaExterna.id}`);
+                return {
+                    success: true,
+                    paymentId: respuestaExterna.id,
+                    redirectUrl: respuestaExterna.init_point
+                };
             }
-            return false;
+            
+            return { success: false };
 
         } catch (error) {
             console.error("[Adapter] Fallo en la comunicación con Mercado Pago", error);
-            return false;
+            return { success: false };
         }
     }
 }
