@@ -1,9 +1,17 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { GestorDeTransacciones } from '../services/commands/GestorDeTransacciones.js';
 import { MockPagoStrategy } from '../services/pagos/MockPagoStrategy.js';
 import { ProcesadorDePagos } from '../services/pagos/ProcesadordePagos.js';
 import { ProcesarCompraCommand } from '../services/commands/ProcesarCompraCommand.js';
 import { Compra } from '../models/Compra.js';
+import TicketRepository from '../repositories/ticketRepository.js';
+
+// Mock del repositorio para evitar conectar con la base de datos real
+vi.mock('../repositories/ticketRepository.js', () => ({
+    default: {
+        createPurchase: vi.fn().mockResolvedValue({ success: true })
+    }
+}));
 
 describe('GestorDeTransacciones', () => {
     let gestor: GestorDeTransacciones;
