@@ -16,9 +16,9 @@ export class ProcesadorDePagos {
     async ejecutarCobro(monto: number, idTransaccion: string): Promise<PagoResult> {
         console.log(`[Procesador] Iniciando pago de $${monto} para TX: ${idTransaccion}`);
         
-        const pagoExitoso = await this.strategy.procesarPago(monto, idTransaccion);
+        const result = await this.strategy.procesarPago(monto, idTransaccion);
         
-        if (!pagoExitoso) {
+        if (!result.success) {
             return {
                 success: false,
                 paymentId: '',
@@ -26,11 +26,10 @@ export class ProcesadorDePagos {
             };
         }
 
-        // Simulamos respuesta de Mercado Pago
         return {
             success: true,
-            paymentId: `MP-${idTransaccion}`,
-            redirectUrl: `https://sandbox.mercadopago.com/checkout/pay/${idTransaccion}`
+            paymentId: result.paymentId || `MP-${idTransaccion}`,
+            redirectUrl: result.redirectUrl || `https://sandbox.mercadopago.com/checkout/pay/${idTransaccion}`
         };
     }
 
