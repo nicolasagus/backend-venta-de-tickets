@@ -14,7 +14,7 @@ export class ProcesarCompraCommand implements ICommand {
     }
 
     async ejecutar(): Promise<boolean> {
-        console.log(`[Comando] Ejecutando orden de compra para: ${this.compra.nombreJuego}`);
+        console.log(`[Comando] Ejecutando orden de compra para: ${this.compra.nombreProducto}`);
         const idTransaccion = this.compra.idTransaccion || `TX-${Date.now()}`;
         this.compra.idTransaccion = idTransaccion;
 

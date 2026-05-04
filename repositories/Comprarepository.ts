@@ -19,7 +19,7 @@ class CompraRepository {
                 .insert([{
                     nombre_apellido: compra.nombreApellido,
                     email: compra.email,
-                    id_juego: compra.idJuego,
+                    id_producto: compra.idProducto,
                     precio_final: compra.precioFinal,
                     estado: compra.estado
                 }])
@@ -34,7 +34,7 @@ class CompraRepository {
                     .from('biblioteca')
                     .insert([{
                         email: compra.email,
-                        id_juego: compra.idJuego,
+                        id_producto: compra.idProducto,
                         id_compra: dataCompra.id // Conectamos con la compra recién hecha
                     }]);
                 

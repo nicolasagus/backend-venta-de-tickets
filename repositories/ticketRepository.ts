@@ -57,7 +57,7 @@ class TicketRepository {
             .from('compras')
             .insert([{
                 id_comprador: compradorData.id,
-                id_producto: purchaseData.idJuego,
+                id_producto: purchaseData.idProducto,
                 cantidad: purchaseData.cantidad,
                 precio_final: purchaseData.precioFinal,
                 estado: purchaseData.estado || 'pendiente',

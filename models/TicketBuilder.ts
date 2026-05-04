@@ -120,8 +120,8 @@ export class TicketBuilder {
         return this;
     }
 
-    public paraElJuego(idJuego: string, nombreJuego: string): this {
-        this.builder.paraElJuego(idJuego, nombreJuego);
+    public paraElProducto(idProducto: string, nombreProducto: string): this {
+        this.builder.paraElProducto(idProducto, nombreProducto);
         return this;
     }
 
