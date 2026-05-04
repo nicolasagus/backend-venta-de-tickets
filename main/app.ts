@@ -1,8 +1,12 @@
 import express from 'express';
+import cors from 'cors';
 // Ajustá la ruta del import si tu controlador se llama distinto o está en otra carpeta
 import { realizarCompra, listarProductos } from './controllers/ticketController.js';
 
 const app = express();
+
+// Middleware para permitir que el FrontEnd se conecte sin problemas de CORS
+app.use(cors());
 
 // Middleware fundamental para que Express entienda los datos en formato JSON que le mandamos
 app.use(express.json());
