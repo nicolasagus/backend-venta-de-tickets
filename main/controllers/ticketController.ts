@@ -30,8 +30,8 @@ export const realizarCompra = async (req: Request, res: Response): Promise<void>
             localidad,
             cantidad,
             email,
-            idJuego,
-            nombreJuego,
+            idProducto,
+            nombreProducto,
             precioUnitario
         } = req.body;
 
@@ -44,8 +44,8 @@ export const realizarCompra = async (req: Request, res: Response): Promise<void>
             !localidad ||
             !cantidad ||
             !email ||
-            !idJuego ||
-            !nombreJuego ||
+            !idProducto ||
+            !nombreProducto ||
             !precioUnitario
         ) {
             res.status(400).json({ error: 'Faltan campos obligatorios para procesar la compra.' });
@@ -55,8 +55,8 @@ export const realizarCompra = async (req: Request, res: Response): Promise<void>
         const cantidadNumero = Number(cantidad);
         const precioUnitarioNumero = Number(precioUnitario);
 
-        if (!Number.isInteger(cantidadNumero) || cantidadNumero < 1 || cantidadNumero > 6) {
-            res.status(400).json({ error: 'La cantidad debe ser un número entero entre 1 y 6.' });
+        if (!Number.isInteger(cantidadNumero) || cantidadNumero !== 1) {
+            res.status(400).json({ error: 'Solamente se puede comprar un ticket/partido a la vez (cantidad debe ser 1).' });
             return;
         }
 
@@ -76,7 +76,7 @@ export const realizarCompra = async (req: Request, res: Response): Promise<void>
             .conLocalidad(localidad)
             .conCantidad(cantidadNumero)
             .conEmail(email)
-            .paraElJuego(idJuego, nombreJuego)
+            .paraElProducto(idProducto, nombreProducto)
             .conPrecioUnitario(precioUnitarioNumero)
             .porUnPrecioDe(precioFinal)
             .build();

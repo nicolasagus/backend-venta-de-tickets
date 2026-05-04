@@ -27,11 +27,11 @@ describe('GestorDeTransacciones', () => {
         compra.apellido = 'Pérez';
         compra.documento = '12345678';
         compra.email = 'juan@example.com';
-        compra.idJuego = 'game-1';
-        compra.nombreJuego = 'Super Mario';
-        compra.cantidad = 2;
-        compra.precioUnitario = 100;
-        compra.precioFinal = 200;
+        compra.idProducto = 'partido-1';
+        compra.nombreProducto = 'Boca vs River';
+        compra.cantidad = 1;
+        compra.precioUnitario = 10000;
+        compra.precioFinal = 10000;
     });
 
     it('should execute a command successfully', async () => {
@@ -50,11 +50,11 @@ describe('GestorDeTransacciones', () => {
         compra2.apellido = 'García';
         compra2.documento = '87654321';
         compra2.email = 'maria@example.com';
-        compra2.idJuego = 'game-2';
-        compra2.nombreJuego = 'Zelda';
+        compra2.idProducto = 'partido-2';
+        compra2.nombreProducto = 'River vs Independiente';
         compra2.cantidad = 1;
-        compra2.precioUnitario = 150;
-        compra2.precioFinal = 150;
+        compra2.precioUnitario = 15000;
+        compra2.precioFinal = 15000;
         
         const comando2 = new ProcesarCompraCommand(compra2, procesadorPagos);
         

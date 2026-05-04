@@ -16,8 +16,8 @@ describe('Compra Model', () => {
 
     it('should calculate final price correctly', () => {
         compra.precioUnitario = 100;
-        compra.cantidad = 3;
-        expect(compra.calcularPrecioFinal()).toBe(300);
+        compra.cantidad = 1;
+        expect(compra.calcularTotal()).toBe(100);
     });
 
     it('should validate a complete compra', () => {
@@ -25,8 +25,8 @@ describe('Compra Model', () => {
         compra.apellido = 'Pérez';
         compra.documento = '12345678';
         compra.email = 'juan@example.com';
-        compra.idJuego = 'game-1';
-        compra.cantidad = 2;
+        compra.idProducto = 'partido-1';
+        compra.cantidad = 1;
         compra.precioUnitario = 50;
 
         expect(compra.validar()).toBe(true);
@@ -41,8 +41,8 @@ describe('Compra Model', () => {
         compra.apellido = 'Pérez';
         compra.documento = '12345678';
         compra.email = 'juan@example.com';
-        compra.idJuego = 'game-1';
-        compra.cantidad = 10; // Mayor a 6
+        compra.idProducto = 'partido-1';
+        compra.cantidad = 2; // Mayor a 1
         compra.precioUnitario = 50;
 
         expect(compra.validar()).toBe(false);
@@ -53,8 +53,8 @@ describe('Compra Model', () => {
         compra.apellido = 'Pérez';
         compra.documento = '12345678';
         compra.email = 'juan@example.com';
-        compra.idJuego = 'game-1';
-        compra.cantidad = 2;
+        compra.idProducto = 'partido-1';
+        compra.cantidad = 1;
         compra.precioUnitario = -50; // Precio negativo
 
         expect(compra.validar()).toBe(false);
@@ -70,18 +70,18 @@ describe('CompraBuilder', () => {
             .conTelefono('1234567890')
             .conProvincia('Buenos Aires')
             .conLocalidad('CABA')
-            .conCantidad(2)
+            .conCantidad(1)
             .conEmail('juan@example.com')
-            .paraElJuego('game-1', 'Super Mario')
+            .paraElProducto('partido-1', 'Boca vs River')
             .conPrecioUnitario(100)
-            .porUnPrecioDe(200)
+            .porUnPrecioDe(100)
             .build();
 
         expect(compra.nombre).toBe('Juan');
         expect(compra.apellido).toBe('Pérez');
         expect(compra.nombreApellido).toBe('Juan Pérez');
-        expect(compra.nombreJuego).toBe('Super Mario');
-        expect(compra.precioFinal).toBe(200);
+        expect(compra.nombreProducto).toBe('Boca vs River');
+        expect(compra.precioFinal).toBe(100);
         expect(compra.estado).toBe('pendiente');
     });
 

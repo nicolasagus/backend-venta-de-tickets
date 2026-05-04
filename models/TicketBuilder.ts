@@ -48,9 +48,9 @@ export class CompraBuilder {
         return this;
     }
 
-    public paraElJuego(idJuego: string, nombreJuego: string): this {
-        this.compra.idJuego = idJuego;
-        this.compra.nombreJuego = nombreJuego;
+    public paraElProducto(idProducto: string, nombreProducto: string): this {
+        this.compra.idProducto = idProducto;
+        this.compra.nombreProducto = nombreProducto;
         return this;
     }
 
